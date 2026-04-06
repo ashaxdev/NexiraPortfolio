@@ -644,7 +644,8 @@ section { padding: 100px 5%; position: relative; z-index: 1; }
   font-size: 13px;
   font-weight: 500;
   cursor: none;
-  display: flex; align-items: center; gap: 8px;
+  /* display: flex; align-items: center; gap: 8px; */
+  display: none;
   transition: var(--transition);
   font-family: var(--font-body);
 }
@@ -1456,7 +1457,7 @@ footer { background: var(--b2); border-top: 1px solid rgba(255,255,255,0.05); pa
 </section>
 
 <!-- ====== OFFERS SECTION ====== -->
-<!-- <section class="offers-sec" id="offers">
+<section class="offers-sec" id="offers">
   <div class="s-head reveal">
     <div class="s-label">Limited Time</div>
     <h2 class="s-title">Special <em>Offers</em></h2>
@@ -1467,10 +1468,10 @@ footer { background: var(--b2); border-top: 1px solid rgba(255,255,255,0.05); pa
     <button class="admin-btn" onclick="toggleAdmin()">
       ⚙️ Manage Offers
     </button>
-  </div> -->
+  </div>
 
   <!-- Admin Panel -->
-  <!-- <div class="admin-panel" id="adminPanel">
+  <div class="admin-panel" id="adminPanel">
     <h3><span>🎯</span> Launch New Offer</h3>
     <div class="admin-form-grid">
       <div class="af-group">
@@ -1530,20 +1531,20 @@ footer { background: var(--b2); border-top: 1px solid rgba(255,255,255,0.05); pa
     </div>
 
     <div class="active-offers-list" id="activeOffersList"></div>
-  </div> -->
+  </div>
 
   <!-- Live Offers Ticker -->
-  <!-- <div class="offers-ticker" id="offersTicker" style="display:none">
+  <div class="offers-ticker" id="offersTicker" style="display:none">
     <div class="offers-ticker-track" id="offersTickerTrack"></div>
-  </div> -->
+  </div>
 
   <!-- Offers Grid -->
-  <!-- <div class="offers-grid" id="offersGrid">
+  <div class="offers-grid" id="offersGrid">
     <div class="no-offers-msg" id="noOffersMsg">
       No active offers right now — check back soon or chat with us on WhatsApp for exclusive deals! 🎉
     </div>
   </div>
-</section> -->
+</section>
 
 <!-- ====== PROJECTS ====== -->
 <section class="projects-sec" id="projects">
