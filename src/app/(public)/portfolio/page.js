@@ -24,7 +24,7 @@ async function getPortfolio() {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/portfolio`,
       {
-        cache: 'no-store',
+        next: { revalidate: 60 },
       }
     )
 

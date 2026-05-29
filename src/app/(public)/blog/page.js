@@ -1,4 +1,5 @@
 import Link from 'next/link'
+
 import { FaArrowRight, FaClock, FaUser } from 'react-icons/fa'
 
 export const metadata = {
@@ -21,7 +22,7 @@ async function getBlogs() {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs?published=true`,
       {
-        cache: 'no-store',
+        next: { revalidate: 60 },
       }
     )
 
