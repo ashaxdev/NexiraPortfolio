@@ -21,7 +21,7 @@ async function getTools() {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/tools`,{
-      next: { revalidate: 60 },
+     cache:'no-store',
       }
     )
     if (!res.ok) throw new Error('Failed to fetch Tools')
