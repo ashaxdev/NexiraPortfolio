@@ -20,9 +20,8 @@ const iconMap = {
 async function getTools() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/tools`,{
-     cache:'no-store',
-      }
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/tools`,
+      { cache: 'no-store' }
     )
     if (!res.ok) throw new Error('Failed to fetch Tools')
     return res.json()
