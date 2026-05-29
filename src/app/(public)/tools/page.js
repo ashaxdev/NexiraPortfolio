@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import { FaArrowRight, FaSearch, FaBolt, FaMagic, FaPalette, FaTag, FaFileInvoice, FaCheckCircle, FaGlobe, FaRobot, FaCloud, FaShoppingCart, FaDatabase, FaBriefcase, FaComments } from 'react-icons/fa'
 

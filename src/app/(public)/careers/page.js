@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import { FaArrowRight, FaWhatsapp, FaMapMarkerAlt, FaBriefcase, FaClock } from 'react-icons/fa'
 
