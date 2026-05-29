@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import Link from 'next/link'
-import { FaArrowRight, FaSearch, FaBolt, FaMagic, FaPalette, FaTag, FaFileInvoice, FaCheckCircle, FaGlobe, FaRobot, FaCloud, FaShoppingCart, FaDatabase, FaBriefcase, FaComments } from 'react-icons/fa'
+import { FaArrowRight, FaCheckCircle, FaGlobe, FaRobot, FaCloud, FaShoppingCart, FaDatabase, FaBriefcase, FaComments } from 'react-icons/fa'
 
 export const metadata = {
   title: 'Free Online Tools - SEO, Speed Test, AI Content | Nexira Solution',
@@ -16,6 +16,8 @@ const iconMap = {
   FaBriefcase,
   FaComments,
 }
+
+const DEFAULT_COLOR = '#00ffd0'
 
 async function getTools() {
   try {
@@ -33,6 +35,7 @@ async function getTools() {
 
 export default async function ToolsPage() {
   const tools = await getTools()
+
   return (
     <>
       {/* Hero */}
@@ -64,48 +67,81 @@ export default async function ToolsPage() {
       <section className="section">
         <div className="container">
           {tools.length === 0 ? (
-            <div
-              className="card"
-              style={{
-                textAlign: 'center',
-                padding: 60,
-              }}
-            >
+            <div className="card" style={{ textAlign: 'center', padding: 60 }}>
               <h2>Coming Soon...</h2>
             </div>
           ) : (
-          <div className="grid-3" style={{ gap: 28 }}>
-            {tools.map((t, i) => {
-              const IconComponent = iconMap[t.icon] || FaGlobe  // ✅ fixed: s → t
-              return (
-                <Link key={i} href={`/tools/${t.slug}`} style={{ display: 'block', textDecoration: 'none' }}>
-                  <div className="card" style={{ height: '100%', position: 'relative', overflow: 'hidden' }}>
-                    <div style={{ position: 'absolute', top: 16, right: 16 }}>
-                      <span style={{ fontSize: 11, padding: '4px 12px', borderRadius: 100, background: t.free ? 'rgba(0,255,208,0.1)' : 'rgba(124,58,237,0.1)', color: t.free ? 'var(--accent)' : 'var(--accent2)', border: `1px solid ${t.free ? 'rgba(0,255,208,0.3)' : 'rgba(124,58,237,0.3)'}`, fontWeight: 700 }}>
-                        {t.free ? '✓ FREE' : '★ PRO'}
+            <div className="grid-3" style={{ gap: 28 }}>
+              {tools.map((t, i) => {
+                const IconComponent = iconMap[t.icon] || FaGlobe
+                const color = t.color || DEFAULT_COLOR
+                const features = Array.isArray(t.features) ? t.features : []
+                const description = t.desc ?? t.description ?? ''
+
+                return (
+                  <Link key={t._id ?? i} href={`/tools/${t.slug}`} style={{ display: 'block', textDecoration: 'none' }}>
+                    <div className="card" style={{ height: '100%', position: 'relative', overflow: 'hidden' }}>
+
+                      {/* FREE / PRO badge */}
+                      <div style={{ position: 'absolute', top: 16, right: 16 }}>
+                        <span style={{
+                          fontSize: 11,
+                          padding: '4px 12px',
+                          borderRadius: 100,
+                          background: t.free ? 'rgba(0,255,208,0.1)' : 'rgba(124,58,237,0.1)',
+                          color: t.free ? 'var(--accent)' : 'var(--accent2)',
+                          border: `1px solid ${t.free ? 'rgba(0,255,208,0.3)' : 'rgba(124,58,237,0.3)'}`,
+                          fontWeight: 700,
+                        }}>
+                          {t.free ? '✓ FREE' : '★ PRO'}
+                        </span>
+                      </div>
+
+                      {/* Icon */}
+                      <div style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 16,
+                        background: `${color}15`,
+                        border: `1px solid ${color}30`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: color,
+                        marginBottom: 20,
+                      }}>
+                        <IconComponent size={32} />
+                      </div>
+
+                      {/* Name */}
+                      <h3 style={{ fontSize: 20, marginBottom: 12 }}>{t.name}</h3>
+
+                      {/* Description */}
+                      <p style={{ color: 'var(--text2)', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
+                        {description}
+                      </p>
+
+                      {/* Features list — safely guarded */}
+                      {features.length > 0 && (
+                        <ul style={{ listStyle: 'none', marginBottom: 24 }}>
+                          {features.map((f, fi) => (
+                            <li key={fi} style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text2)', fontSize: 13, marginBottom: 8 }}>
+                              <FaCheckCircle style={{ color: color, flexShrink: 0 }} /> {f}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {/* CTA */}
+                      <span style={{ color: color, fontSize: 14, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        Use Tool <FaArrowRight size={12} />
                       </span>
+
                     </div>
-                    <div style={{ width: 60, height: 60, borderRadius: 16, background: `${t.color}15`, border: `1px solid ${t.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.color, marginBottom: 20 }}>
-                      <IconComponent size={32} />
-                    </div>
-                    <h3 style={{ fontSize: 20, marginBottom: 12 }}>{t.name}</h3>
-                    <p style={{ color: 'var(--text2)', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>{t.desc ?? t.description}</p>  {/* ✅ handles both field names */}
-                    <ul style={{ listStyle: 'none', marginBottom: 24 }}>
-                      {t.features.map(f => (
-                        <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text2)', fontSize: 13, marginBottom: 8 }}>
-                          <FaCheckCircle style={{ color: t.color, flexShrink: 0 }} /> {f}
-                        </li>
-                      ))}
-                    </ul>
-                    {/* ✅ "Use Tool" as its own visible link */}
-                    <Link href={`/tools/${t.slug}`} style={{ color: t.color, fontSize: 14, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
-                      Use Tool <FaArrowRight size={12} />
-                    </Link>
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
+                  </Link>
+                )
+              })}
+            </div>
           )}
         </div>
       </section>
