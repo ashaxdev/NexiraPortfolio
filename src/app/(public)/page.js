@@ -45,8 +45,10 @@ export default function HomePage() {
     <>
       {/* HERO - Video Background */}
       {/* HERO - Video Background */}
+{/* HERO - Video Background */}
 <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-  {/* Desktop Video */}
+  
+  {/* Desktop Video - hidden on mobile */}
   <video
     autoPlay muted loop playsInline
     style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
@@ -55,16 +57,25 @@ export default function HomePage() {
     <source src="/videos/nexira1.mp4" type="video/mp4" />
   </video>
 
-  {/* Mobile Video */}
-  <video
-    autoPlay muted loop playsInline
-    style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
-    className="video-mobile"
-  >
-    <source src="/videos/nexira1.mp4" type="video/mp4" />
-  </video>
+  {/* Mobile Image - hidden on desktop */}
+  <div
+    className="hero-mobile-bg"
+    style={{
+      position: 'absolute',
+      inset: 0,
+      backgroundImage: 'url(/images/heroimg.jpeg)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      zIndex: 0,
+    }}
+  />
 
-  
+  {/* Optional overlay for readability */}
+  {/* <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 1 }} /> */}
+
+  {/* Your hero content here, zIndex: 2 */}
+
 </section>
       {/* STATS */}
       <section style={{ padding: '60px 0', background: 'var(--bg2)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>

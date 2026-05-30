@@ -580,16 +580,20 @@ textarea.input {
     font-size: 24px;
   }
 }
-/* Mobile/Desktop video toggle */
-.video-mobile {
+/* Desktop: show video, hide mobile image */
+.video-desktop {
+  display: block;
+}
+.hero-mobile-bg {
   display: none;
 }
 
+/* Mobile: hide video, show image */
 @media (max-width: 768px) {
   .video-desktop {
     display: none;
   }
-  .video-mobile {
+  .hero-mobile-bg {
     display: block;
   }
 }
