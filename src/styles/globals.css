@@ -333,7 +333,7 @@ img {
 
 /* Decorative Orbs */
 
-/* .orb {
+.orb {
   position: absolute;
 
   border-radius: 50%;
@@ -351,7 +351,7 @@ img {
 
 .orb-dark {
   background: rgba(0, 0, 0, 0.05);
-} */
+}
 
 /* WhatsApp */
 
