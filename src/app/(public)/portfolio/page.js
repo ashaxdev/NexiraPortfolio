@@ -5,6 +5,9 @@ import { FaArrowRight, FaExternalLinkAlt } from 'react-icons/fa'
 export const metadata = {
   title: 'Portfolio - Our Projects | Nexira Solution',
   description: 'Explore Nexira Solution\'s portfolio of websites, ERP systems, SaaS platforms, e-commerce stores, and AI projects delivered for clients.',
+  alternates: {
+    canonical: 'https://nexirasolution.in/portfolio',
+  },
 }
 
 const categories = ['All', 'Web', 'E-Commerce', 'SaaS', 'ERP', 'AI', 'Mobile']

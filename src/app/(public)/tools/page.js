@@ -5,6 +5,9 @@ import { FaArrowRight, FaCheckCircle, FaGlobe, FaRobot, FaCloud, FaShoppingCart,
 export const metadata = {
   title: 'Free Online Tools - SEO, Speed Test, AI Content | Nexira Solution',
   description: 'Access free and premium online tools from Nexira Solution: SEO analyzer, website speed test, AI content generator, meta tag generator, and more.',
+  alternates: {
+    canonical: 'https://nexirasolution.in/tools',
+  },
 }
 
 const iconMap = {

@@ -5,6 +5,9 @@ import { FaArrowRight, FaWhatsapp, FaMapMarkerAlt, FaBriefcase, FaClock } from '
 export const metadata = {
   title: 'Careers - Join Nexira Solution | IT Jobs in Chennai',
   description: 'Join Nexira Solution — a fast-growing IT company in Chennai. Explore open positions in web development, AI, design, and more.',
+  alternates: {
+    canonical: 'https://nexirasolution.in/careers',
+  },
 }
 
 // const openings = [
