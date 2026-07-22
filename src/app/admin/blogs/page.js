@@ -1,6 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { FaPlus, FaEdit, FaTrash, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa'
+import { useState, useEffect, useRef } from 'react'
+import { FaPlus, FaEdit, FaTrash, FaEye, FaEyeSlash, FaTimes, FaCloudUploadAlt, FaSpinner } from 'react-icons/fa'
 import toast from 'react-hot-toast'
 
 const empty = { title: '', excerpt: '', content: '', image: '', category: 'General', tags: '', author: 'Nexira Team', published: false, seo: { title: '', description: '', keywords: '' } }
@@ -12,6 +12,9 @@ export default function BlogsAdminPage() {
   const [form, setForm] = useState(empty)
   const [editing, setEditing] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [dragActive, setDragActive] = useState(false)
+  const fileInputRef = useRef(null)
 
   const load = () => fetch('/api/blogs').then(r => r.json()).then(setItems).finally(() => setLoading(false))
   useEffect(() => { load() }, [])
@@ -36,6 +39,47 @@ export default function BlogsAdminPage() {
   const h = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }))
   const hs = e => setForm(p => ({ ...p, seo: { ...p.seo, [e.target.name]: e.target.value } }))
 
+  // ---- Image upload logic ----
+  const uploadFile = async file => {
+    if (!file) return
+    if (!file.type.startsWith('image/')) { toast.error('Only image files are allowed'); return }
+    if (file.size > 5 * 1024 * 1024) { toast.error('File too large (max 5MB)'); return }
+
+    setUploading(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/upload', { method: 'POST', body: fd })
+      const data = await res.json()
+      if (data.success) {
+        setForm(p => ({ ...p, image: data.url }))
+        toast.success('Image uploaded!')
+      } else {
+        toast.error(data.error || 'Upload failed')
+      }
+    } catch (err) {
+      toast.error('Upload failed')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleFileSelect = e => {
+    const file = e.target.files?.[0]
+    uploadFile(file)
+    e.target.value = ''
+  }
+
+  const handleDrop = e => {
+    e.preventDefault()
+    setDragActive(false)
+    const file = e.dataTransfer.files?.[0]
+    uploadFile(file)
+  }
+
+  const handleDragOver = e => { e.preventDefault(); setDragActive(true) }
+  const handleDragLeave = e => { e.preventDefault(); setDragActive(false) }
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
@@ -48,6 +92,9 @@ export default function BlogsAdminPage() {
           items.length === 0 ? <div style={{ padding: 32, textAlign: 'center', color: 'var(--text3)' }}>No blog posts yet. Create your first one!</div> :
           items.map((item, i) => (
             <div key={item._id} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px 20px', borderBottom: i < items.length - 1 ? '1px solid var(--border)' : 'none' }}>
+              {item.image && (
+                <img src={item.image} alt={item.title} style={{ width: 56, height: 56, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border)', flexShrink: 0 }} />
+              )}
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{item.title}</span>
@@ -82,7 +129,65 @@ export default function BlogsAdminPage() {
               <div className="form-group"><label>Excerpt *</label><textarea className="input" name="excerpt" value={form.excerpt} onChange={h} required rows={2} placeholder="Short description" /></div>
               <div className="form-group"><label>Content *</label><textarea className="input" name="content" value={form.content} onChange={h} required rows={8} placeholder="Full blog content (HTML supported)" /></div>
               <div className="form-group"><label>Tags (comma separated)</label><input className="input" name="tags" value={form.tags} onChange={h} placeholder="web, development, react" /></div>
-              <div className="form-group"><label>Featured Image URL</label><input className="input" name="image" value={form.image} onChange={h} placeholder="https://..." /></div>
+
+              {/* Image upload / drag & drop */}
+              <div className="form-group">
+                <label>Featured Image</label>
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  style={{
+                    border: `2px dashed ${dragActive ? 'var(--primary)' : 'var(--border)'}`,
+                    borderRadius: 12,
+                    padding: form.image ? 0 : 24,
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    background: dragActive ? 'var(--bg3)' : 'transparent',
+                    transition: 'all 0.15s ease',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    style={{ display: 'none' }}
+                  />
+
+                  {uploading ? (
+                    <div style={{ padding: 24, color: 'var(--text2)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                      <FaSpinner style={{ fontSize: 24, animation: 'spin 1s linear infinite' }} />
+                      <span style={{ fontSize: 13 }}>Uploading...</span>
+                    </div>
+                  ) : form.image ? (
+                    <div style={{ position: 'relative' }}>
+                      <img src={form.image} alt="preview" style={{ width: '100%', height: 200, objectFit: 'contain', display: 'block', background: 'var(--bg3)' }} />
+                      <button
+                        type="button"
+                        onClick={e => { e.stopPropagation(); setForm(p => ({ ...p, image: '' })) }}
+                        style={{
+                          position: 'absolute', top: 8, right: 8, width: 28, height: 28, borderRadius: '50%',
+                          border: 'none', background: 'rgba(0,0,0,0.6)', color: '#fff', cursor: 'pointer',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center'
+                        }}
+                      >
+                        <FaTimes size={12} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ color: 'var(--text2)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                      <FaCloudUploadAlt style={{ fontSize: 28 }} />
+                      <span style={{ fontSize: 13 }}>Drag & drop an image, or click to select</span>
+                      <span style={{ fontSize: 11, opacity: 0.7 }}>PNG, JPG up to 5MB</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 12, padding: 20, marginBottom: 20 }}>
                 <h3 style={{ fontSize: 15, marginBottom: 16, color: 'var(--primary)' }}>SEO Settings</h3>
                 <div className="form-group"><label>SEO Title</label><input className="input" name="title" value={form.seo?.title} onChange={hs} placeholder="SEO optimized title" /></div>
@@ -95,12 +200,19 @@ export default function BlogsAdminPage() {
                 </label>
                 <div style={{ flex: 1 }} />
                 <button type="button" onClick={() => setModal(false)} className="btn btn-outline">Cancel</button>
-                <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? 'Saving...' : editing ? 'Update Post' : 'Create Post'}</button>
+                <button type="submit" className="btn btn-primary" disabled={saving || uploading}>{saving ? 'Saving...' : editing ? 'Update Post' : 'Create Post'}</button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      <style jsx global>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   )
 }
