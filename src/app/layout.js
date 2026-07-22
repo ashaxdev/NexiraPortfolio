@@ -8,8 +8,8 @@ export const metadata = {
     default: 'Nexira Solution - IT Solutions | Web Development, AI Agents, ERP & More',
     template: '%s | Nexira Solution',
   },
-  description: 'Nexira Solution is a leading IT company in Madurai offering website development, ERP, SaaS, e-commerce, AI agents, AI chatbots, and digital transformation services.',
-  keywords: ['IT company Madurai', 'web development', 'AI agents', 'ERP solutions', 'SaaS development', 'e-commerce', 'AI chatbot', 'Nexira Solution'],
+  description: 'Nexira Solution is a leading IT company in Chennai offering website development, ERP, SaaS, e-commerce, AI agents, AI chatbots, and digital transformation services.',
+  keywords: ['IT company Chennai', 'web development', 'AI agents', 'ERP solutions', 'SaaS development', 'e-commerce', 'AI chatbot', 'Nexira Solution'],
   authors: [{ name: 'Nexira Solution', url: 'https://www.nexirasolution.in' }],
   creator: 'Nexira Solution',
   publisher: 'Nexira Solution',
@@ -71,7 +71,7 @@ export default function RootLayout({ children }) {
               },
               "address": {
                 "@type": "PostalAddress",
-                "addressLocality": "Madurai",
+                "addressLocality": "Chennai",
                 "addressRegion": "Tamil Nadu",
                 "addressCountry": "IN"
               }
