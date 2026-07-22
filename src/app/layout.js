@@ -34,14 +34,24 @@ export const metadata = {
   },
   alternates: { canonical: 'https://www.nexirasolution.in' },
   verification: { google: 'your-google-verification-code' },
+  // Icons declared through the metadata API so Next.js manages the <link> tags itself
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* Icons are now handled by metadata.icons above — no manual <link> tags needed */}
         <meta name="theme-color" content="#050a14" />
         <script
           type="application/ld+json"
