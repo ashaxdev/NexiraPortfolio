@@ -10,51 +10,6 @@ export const metadata = {
   },
 }
 
-// const services = [
-//   {
-//     icon: <FaGlobe size={32} />, title: 'Website & Landing Page', color: '#00aaff',
-//     desc: 'High-converting, SEO-optimized websites and landing pages built with modern tech stacks for maximum performance.',
-//     features: ['Responsive Design', 'SEO Optimized', 'CMS Integration', 'Fast Loading', 'Custom Domain', 'SSL Certificate'],
-//     price: 'Starting ₹15,000',
-//   },
-//   {
-//     icon: <FaBriefcase size={32} />, title: 'Portfolio Websites', color: '#7c3aed',
-//     desc: 'Professional portfolio websites that showcase your skills and work to attract the right clients and employers.',
-//     features: ['Custom Design', 'Project Gallery', 'Contact Forms', 'Social Links', 'Blog Section', 'Mobile Ready'],
-//     price: 'Starting ₹8,000',
-//   },
-//   {
-//     icon: <FaDatabase size={32} />, title: 'ERP Solutions', color: '#00ffd0',
-//     desc: 'Complete Enterprise Resource Planning systems that unify finance, HR, inventory, sales, and operations.',
-//     features: ['Multi-module', 'Real-time Reports', 'Role-based Access', 'Cloud Hosted', 'API Integration', 'Custom Workflow'],
-//     price: 'Starting ₹80,000',
-//   },
-//   {
-//     icon: <FaCloud size={32} />, title: 'SaaS Development', color: '#f59e0b',
-//     desc: 'Scalable Software as a Service products with multi-tenant architecture and subscription billing.',
-//     features: ['Multi-tenant', 'Subscription Billing', 'Analytics Dashboard', 'API First', 'Scalable Infra', 'Onboarding Flow'],
-//     price: 'Starting ₹1,50,000',
-//   },
-//   {
-//     icon: <FaShoppingCart size={32} />, title: 'E-Commerce', color: '#ef4444',
-//     desc: 'Full-featured online stores with payment gateway, inventory management, and seamless checkout.',
-//     features: ['Payment Gateway', 'Inventory Mgmt', 'Order Tracking', 'Admin Panel', 'Reviews & Ratings', 'Email Notifications'],
-//     price: 'Starting ₹30,000',
-//   },
-//   {
-//     icon: <FaRobot size={32} />, title: 'AI Agents', color: '#10b981',
-//     desc: 'Intelligent AI agents that autonomously handle complex business workflows, decisions, and automation.',
-//     features: ['Task Automation', 'Natural Language', 'API Integration', '24/7 Operation', 'Custom Training', 'Analytics'],
-//     price: 'Starting ₹50,000',
-//   },
-//   {
-//     icon: <FaComments size={32} />, title: 'AI Chatbots', color: '#ec4899',
-//     desc: 'Smart conversational AI chatbots for customer support, lead generation, and engagement on your platforms.',
-//     features: ['NLP Powered', 'Multi-platform', 'CRM Integration', 'Live Handoff', 'Analytics', 'Custom Training'],
-//     price: 'Starting ₹25,000',
-//   },
-// ]
-
 const iconMap = {
   FaGlobe,
   FaRobot,
@@ -64,21 +19,49 @@ const iconMap = {
   FaBriefcase,
   FaComments,
 }
+
 /* DEFAULT COLORS */
 const defaultColors = [
-  
   '#fac83d',
-  
 ]
 
 const wa = 'https://wa.me/919384155672?text=Hi, I want to discuss a project!'
+
+// Approximate INR -> USD rate. Update this periodically or wire it up to a live FX API if you want it always accurate.
+const USD_RATE = 87
+
+// Flat markup added to every converted USD price.
+const USD_MARKUP = 1000
+
+// Parses a string like "Starting ₹15,000" and returns both the original INR text
+// and a formatted USD equivalent for visitors browsing from outside India.
+function getPriceDisplay(price) {
+  if (!price) return { inr: price, usd: null }
+
+  const match = price.match(/[\d,]+/)
+  if (!match) return { inr: price, usd: null }
+
+  const num = parseInt(match[0].replace(/,/g, ''), 10)
+  if (isNaN(num) || num <= 0) return { inr: price, usd: null }
+
+  const usdValue = num / USD_RATE + USD_MARKUP
+  let usdFormatted
+  if (usdValue >= 1000) {
+    usdFormatted = `$${(usdValue / 1000).toFixed(1)}k`
+  } else {
+    // round to nearest 5 for a cleaner-looking number
+    usdFormatted = `$${(Math.round(usdValue / 5) * 5).toLocaleString('en-US')}`
+  }
+
+  return { inr: price, usd: usdFormatted }
+}
 
 async function getServices() {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/services`,
       {
-        cache:'no-store',
+        cache: 'no-store',
       }
     )
 
@@ -92,9 +75,6 @@ async function getServices() {
     return []
   }
 }
-
-// export default async function PortfolioPage() {
-  
 
 export default async function ServicesPage() {
   const services = await getServices()
@@ -128,49 +108,28 @@ export default async function ServicesPage() {
         <div className="container">
           <div style={{ display: 'grid', gap: 32 }}>
             {services.map((s, i) => {
-              const IconComponent =
-                iconMap[s.icon] || FaGlobe
-
-              const serviceColor =
-                s.color || defaultColors[i % defaultColors.length]
+              const IconComponent = iconMap[s.icon] || FaGlobe
+              const serviceColor = s.color || defaultColors[i % defaultColors.length]
+              const { inr, usd } = getPriceDisplay(s.price)
 
               return (
                 <div
                   key={i}
-                  className="card"
+                  className="card service-card"
                   style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr auto',
-                    gap: 32,
-                    alignItems: 'center',
-                    padding: '32px',
                     border: `1px solid ${serviceColor}20`,
-                    background:
-                      'linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
-                    transition: '0.3s ease',
+                    background: 'linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
                   }}
                 >
                   {/* LEFT */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      gap: 24,
-                      alignItems: 'flex-start',
-                    }}
-                  >
+                  <div className="service-left">
                     {/* ICON */}
                     <div
+                      className="service-icon"
                       style={{
-                        width: 72,
-                        height: 72,
-                        borderRadius: 20,
                         background: `${serviceColor}15`,
                         border: `1px solid ${serviceColor}30`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
                         color: serviceColor,
-                        flexShrink: 0,
                         boxShadow: `0 10px 30px ${serviceColor}20`,
                       }}
                     >
@@ -178,53 +137,27 @@ export default async function ServicesPage() {
                     </div>
 
                     {/* CONTENT */}
-                    <div style={{ flex: 1 }}>
-                      <h2
-                        style={{
-                          fontSize: 'clamp(22px, 2.5vw, 30px)',
-                          marginBottom: 12,
-                        }}
-                      >
+                    <div className="service-content">
+                      <h2 className="service-title">
                         {s.title}
                       </h2>
 
-                      <p
-                        style={{
-                          color: 'var(--text2)',
-                          fontSize: 15,
-                          lineHeight: 1.8,
-                          marginBottom: 24,
-                        }}
-                      >
+                      <p className="service-desc">
                         {s.description}
                       </p>
 
                       {/* FEATURES */}
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: 12,
-                        }}
-                      >
+                      <div className="service-features">
                         {s.features?.map((f) => (
                           <div
                             key={f}
+                            className="service-feature-pill"
                             style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 8,
-                              padding: '8px 14px',
-                              borderRadius: 999,
                               background: `${serviceColor}10`,
                               border: `1px solid ${serviceColor}20`,
-                              fontSize: 13,
-                              color: 'var(--text2)',
                             }}
                           >
-                            <FaCheckCircle
-                              style={{ color: serviceColor }}
-                            />
+                            <FaCheckCircle style={{ color: serviceColor }} />
                             {f}
                           </div>
                         ))}
@@ -233,42 +166,34 @@ export default async function ServicesPage() {
                   </div>
 
                   {/* RIGHT */}
-                  <div
-                    style={{
-                      textAlign: 'right',
-                      minWidth: 180,
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: 26,
-                        fontWeight: 800,
-                        color: serviceColor,
-                        marginBottom: 20,
-                      }}
-                    >
-                      {s.price}
+                  <div className="service-right">
+                    <div className="service-price" style={{ color: serviceColor }}>
+                      {inr}
                     </div>
+                    {usd && (
+                      <div className="service-price-usd">
+                        ~{usd} USD
+                      </div>
+                    )}
 
                     <a
                       href={`https://wa.me/919384155672?text=${encodeURIComponent(
-    `Hi, I'm interested in your *${s.title}* service!\n\n` +
-    `📦 *Service:* ${s.title}\n` +
-    `💰 *Price:* ${s.price}\n` +
-    
-    `Could you please provide more details?`
-  )}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="btn btn-primary"
-  style={{
-    background: serviceColor,
-    border: 'none',
-    whiteSpace: 'nowrap',
-  }}
->
-  Get Started <FaArrowRight size={12} />
-</a>
+                        `Hi, I'm interested in your *${s.title}* service!\n\n` +
+                        `📦 *Service:* ${s.title}\n` +
+                        `💰 *Price:* ${s.price}${usd ? ` (~${usd} USD)` : ''}\n` +
+                        `Could you please provide more details?`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary service-cta"
+                      style={{
+                        background: serviceColor,
+                        border: 'none',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Get Started <FaArrowRight size={12} />
+                    </a>
                   </div>
                 </div>
               )
@@ -301,6 +226,168 @@ export default async function ServicesPage() {
           </div>
         </div>
       </section>
+
+      <style>{`
+        .service-card {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 32px;
+          align-items: center;
+          padding: 32px;
+          transition: 0.3s ease;
+        }
+
+        .service-left {
+          display: flex;
+          gap: 24px;
+          align-items: flex-start;
+        }
+
+        .service-icon {
+          width: 72px;
+          height: 72px;
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .service-content {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .service-title {
+          font-size: clamp(22px, 2.5vw, 30px);
+          margin-bottom: 12px;
+        }
+
+        .service-desc {
+          color: var(--text2);
+          font-size: 15px;
+          line-height: 1.8;
+          margin-bottom: 24px;
+        }
+
+        .service-features {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .service-feature-pill {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 14px;
+          border-radius: 999px;
+          font-size: 13px;
+          color: var(--text2);
+          white-space: nowrap;
+        }
+
+        .service-right {
+          text-align: right;
+          min-width: 180px;
+        }
+
+        .service-price {
+          font-size: 26px;
+          font-weight: 800;
+          margin-bottom: 4px;
+        }
+
+        .service-price-usd {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--text2);
+          opacity: 0.85;
+          margin-bottom: 20px;
+        }
+
+        .service-cta {
+          display: inline-flex;
+        }
+
+        /* Tablet */
+        @media (max-width: 900px) {
+          .service-card {
+            grid-template-columns: 1fr;
+            gap: 24px;
+            padding: 24px;
+          }
+
+          .service-right {
+            text-align: left;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+          }
+
+          .service-price-usd {
+            margin-bottom: 0;
+          }
+
+          .service-cta {
+            width: auto;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 560px) {
+          .service-card {
+            padding: 20px;
+            gap: 20px;
+          }
+
+          .service-left {
+            gap: 16px;
+          }
+
+          .service-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+          }
+
+          .service-icon svg {
+            width: 24px;
+            height: 24px;
+          }
+
+          .service-title {
+            margin-bottom: 8px;
+          }
+
+          .service-desc {
+            font-size: 14px;
+            margin-bottom: 16px;
+          }
+
+          .service-feature-pill {
+            font-size: 12px;
+            padding: 6px 12px;
+          }
+
+          .service-right {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .service-price {
+            font-size: 22px;
+          }
+
+          .service-cta {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      `}</style>
     </>
   )
 }
