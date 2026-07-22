@@ -1,23 +1,22 @@
-const BASE_URL = 'https://www.nexirasolution.in'
-
 export default function sitemap() {
-  const lastModified = new Date() // or a fixed date if you prefer static builds
-
+  const base = 'https://www.nexirasolution.in'
   const routes = [
-    { path: '', priority: 1.0, changeFrequency: 'weekly' },
-    { path: '/about', priority: 0.8, changeFrequency: 'monthly' },
-    { path: '/services', priority: 0.8, changeFrequency: 'monthly' },
-    { path: '/portfolio', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/tools', priority: 0.8, changeFrequency: 'monthly' },
-    { path: '/blog', priority: 0.8, changeFrequency: 'daily' },
-    { path: '/careers', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/contact', priority: 0.8, changeFrequency: 'yearly' },
+    '',
+    '/about',
+    '/services',
+    '/portfolio',
+    '/blog',
+    '/careers',
+    '/contact',
+    '/tools',
+    '/privacy-policy',
+    '/terms',
   ]
 
   return routes.map((route) => ({
-    url: `${BASE_URL}${route.path}`,
-    lastModified,
-    changeFrequency: route.changeFrequency,
-    priority: route.priority,
+    url: `${base}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: route === '' ? 1 : 0.7,
   }))
 }
