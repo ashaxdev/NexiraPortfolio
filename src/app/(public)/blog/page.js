@@ -8,7 +8,7 @@ export const metadata = {
   description:
     'Read expert articles on web development, AI, ERP, SaaS, digital marketing, and technology trends from the Nexira Solution team.',
   alternates: {
-    canonical: 'https://nexirasolution.in/blog',
+    canonical: 'https://www.nexirasolution.in/blog',
   },
 }
 

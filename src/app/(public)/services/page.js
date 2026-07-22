@@ -6,7 +6,7 @@ export const metadata = {
   title: 'Services - Web Development, AI, ERP, SaaS | Nexira Solution',
   description: 'Nexira Solution offers website development, landing pages, ERP, SaaS, e-commerce, AI agents, and AI chatbots. Premium IT services in Chennai.',
   alternates: {
-    canonical: 'https://nexirasolution.in/services',
+    canonical: 'https://www.nexirasolution.in/services',
   },
 }
 
