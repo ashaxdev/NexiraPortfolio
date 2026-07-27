@@ -81,66 +81,86 @@ export default async function ToolsPage() {
                 const features = Array.isArray(t.features) ? t.features : []
                 const description = t.desc ?? t.description ?? ''
 
-                return (
-                  <Link key={t._id ?? i} href={`/tools/${t.slug}`} style={{ display: 'block', textDecoration: 'none' }}>
-                    <div className="card" style={{ height: '100%', position: 'relative', overflow: 'hidden' }}>
+                // Detect whether this tool lives on another domain/subdomain
+                // (e.g. https://billsy.nexirasolution.in) vs an internal /tools/[slug] page.
+                const isExternal = typeof t.url === 'string' && /^https?:\/\//i.test(t.url)
+                const href = isExternal ? t.url : `/tools/${t.slug}`
 
-                      {/* FREE / PRO badge */}
-                      <div style={{ position: 'absolute', top: 16, right: 16 }}>
-                        <span style={{
-                          fontSize: 11,
-                          padding: '4px 12px',
-                          borderRadius: 100,
-                          background: t.free ? 'rgba(0,255,208,0.1)' : 'rgba(124,58,237,0.1)',
-                          color: t.free ? 'var(--accent)' : 'var(--accent2)',
-                          border: `1px solid ${t.free ? 'rgba(0,255,208,0.3)' : 'rgba(124,58,237,0.3)'}`,
-                          fontWeight: 700,
-                        }}>
-                          {t.free ? '✓ FREE' : '★ PRO'}
-                        </span>
-                      </div>
+                const cardContent = (
+                  <div className="card" style={{ height: '100%', position: 'relative', overflow: 'hidden' }}>
 
-                      {/* Icon */}
-                      <div style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: 16,
-                        background: `${color}15`,
-                        border: `1px solid ${color}30`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: color,
-                        marginBottom: 20,
+                    {/* FREE / PRO badge */}
+                    <div style={{ position: 'absolute', top: 16, right: 16 }}>
+                      <span style={{
+                        fontSize: 11,
+                        padding: '4px 12px',
+                        borderRadius: 100,
+                        background: t.free ? 'rgba(0,255,208,0.1)' : 'rgba(124,58,237,0.1)',
+                        color: t.free ? 'var(--accent)' : 'var(--accent2)',
+                        border: `1px solid ${t.free ? 'rgba(0,255,208,0.3)' : 'rgba(124,58,237,0.3)'}`,
+                        fontWeight: 700,
                       }}>
-                        <IconComponent size={32} />
-                      </div>
-
-                      {/* Name */}
-                      <h3 style={{ fontSize: 20, marginBottom: 12 }}>{t.name}</h3>
-
-                      {/* Description */}
-                      <p style={{ color: 'var(--text2)', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
-                        {description}
-                      </p>
-
-                      {/* Features list — safely guarded */}
-                      {features.length > 0 && (
-                        <ul style={{ listStyle: 'none', marginBottom: 24 }}>
-                          {features.map((f, fi) => (
-                            <li key={fi} style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text2)', fontSize: 13, marginBottom: 8 }}>
-                              <FaCheckCircle style={{ color: color, flexShrink: 0 }} /> {f}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      {/* CTA */}
-                      <span style={{ color: color, fontSize: 14, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                        Use Tool <FaArrowRight size={12} />
+                        {t.free ? '✓ FREE' : '★ PRO'}
                       </span>
-
                     </div>
+
+                    {/* Icon */}
+                    <div style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 16,
+                      background: `${color}15`,
+                      border: `1px solid ${color}30`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: color,
+                      marginBottom: 20,
+                    }}>
+                      <IconComponent size={32} />
+                    </div>
+
+                    {/* Name */}
+                    <h3 style={{ fontSize: 20, marginBottom: 12 }}>{t.name}</h3>
+
+                    {/* Description */}
+                    <p style={{ color: 'var(--text2)', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
+                      {description}
+                    </p>
+
+                    {/* Features list — safely guarded */}
+                    {features.length > 0 && (
+                      <ul style={{ listStyle: 'none', marginBottom: 24 }}>
+                        {features.map((f, fi) => (
+                          <li key={fi} style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text2)', fontSize: 13, marginBottom: 8 }}>
+                            <FaCheckCircle style={{ color: color, flexShrink: 0 }} /> {f}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {/* CTA */}
+                    <span style={{ color: color, fontSize: 14, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                      Use Tool <FaArrowRight size={12} />
+                    </span>
+
+                  </div>
+                )
+
+                // External tools (like Billsy on billsy.nexirasolution.in) get a plain <a>
+                // so the browser navigates straight there. Internal tools keep using
+                // Next.js's <Link> for client-side routing to /tools/[slug].
+                return isExternal ? (
+                  <a
+                    key={t._id ?? i}
+                    href={href}
+                    style={{ display: 'block', textDecoration: 'none' }}
+                  >
+                    {cardContent}
+                  </a>
+                ) : (
+                  <Link key={t._id ?? i} href={href} style={{ display: 'block', textDecoration: 'none' }}>
+                    {cardContent}
                   </Link>
                 )
               })}
