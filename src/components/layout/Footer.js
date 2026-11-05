@@ -128,7 +128,7 @@ export default function Footer() {
           <div>
             <h4 style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 700, marginBottom: 20, color: '#fff' }}>Contact</h4>
             {[
-              { icon: <FaPhone />, text: '+91 9384155672', href: 'tel:+919384155672' },
+              { icon: <FaPhone />, text: '+91 9486350579', href: 'tel:+919486350579' },
               { icon: <FaWhatsapp />, text: 'WhatsApp Us', href: wa },
               { icon: <FaEnvelope />, text: 'nexirasolution@gmail.com', href: 'mailto:nexirasolution@gmail.com' },
               { icon: <FaGlobe />, text: 'www.nexirasolution.in', href: 'https://www.nexirasolution.in' },

@@ -34,7 +34,7 @@ export default function Navbar() {
   }, [])
 
   const wa = `https://wa.me/${
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919384155672'
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919486350579'
   }?text=Hi, I'm interested in your services!`
 
   return (

@@ -29,7 +29,7 @@ export default function ContactPage() {
     setLoading(false)
   }
 
-  const wa = 'https://wa.me/919384155672?text=Hi Nexira Solution, I need a quote!'
+  const wa = 'https://wa.me/919486350579?text=Hi Nexira Solution, I need a quote!'
 
   return (
     <>
@@ -107,7 +107,7 @@ export default function ContactPage() {
               <div className="card" style={{ marginBottom: 24 }}>
                 <h3 style={{ fontSize: 20, marginBottom: 20 }}>Contact Information</h3>
                 {[
-                  { icon: <FaPhone />, label: 'Phone', value: '+91 9384155672', href: 'tel:+919384155672', color: '#00aaff' },
+                  { icon: <FaPhone />, label: 'Phone', value: '+91 9486350579', href: 'tel:+919486350579', color: '#00aaff' },
                   { icon: <FaWhatsapp />, label: 'WhatsApp', value: 'Chat with us now', href: wa, color: '#25d366' },
                   { icon: <FaEnvelope />, label: 'Email', value: 'nexirasolution@gmail.com', href: 'mailto:nexirasolution@gmail.com', color: '#f59e0b' },
                   { icon: <FaMapMarkerAlt />, label: 'Location', value: 'Chennai, Tamil Nadu, India', href: '#', color: '#ec4899' },
@@ -130,7 +130,7 @@ export default function ContactPage() {
                   <FaWhatsapp style={{ fontSize: 40, color: '#fff', flexShrink: 0 }} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 4 }}>WhatsApp for Instant Reply</div>
-                    <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>Get a response in minutes. +91 9384155672</div>
+                    <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>Get a response in minutes. +91 9486350579</div>
                   </div>
                 </div>
               </a>

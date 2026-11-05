@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { FaArrowRight, FaWhatsapp, FaGlobe, FaRobot, FaCloud, FaShoppingCart, FaDatabase, FaBriefcase, FaComments, FaCheckCircle, FaStar, FaUsers, FaProjectDiagram, FaAward, FaTimes, FaUser, FaPhone, FaEnvelope, FaCommentDots } from 'react-icons/fa'
 
-const WHATSAPP_NUMBER = '919384155672' // country code + number, no + or spaces
+const WHATSAPP_NUMBER = '919486350579' // country code + number, no + or spaces
 
 // Brand accents:
 // --brand   : established site accent (amber) — kept for continuity with the rest of the site
@@ -543,7 +543,7 @@ export default function HomeClient() {
                 Get free quote <FaArrowRight />
               </button>
               <a href={waLink} target="_blank" rel="noopener noreferrer" className="btn nx-wa-cta">
-                <FaWhatsapp /> WhatsApp: 93841 55672
+                <FaWhatsapp /> WhatsApp: 9486350579
               </a>
             </div>
           </div>
