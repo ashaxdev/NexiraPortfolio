@@ -26,7 +26,7 @@ const socials = [
 ]
 
 export default function Footer() {
-  const wa = `https://wa.me/919384155672?text=Hi Nexira Solution, I need your help!`
+  const wa = `https://wa.me/919486350579?text=Hi Nexira Solution, I need your help!`
   const year = new Date().getFullYear()
 
   return (
